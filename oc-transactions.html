@@ -1,4 +1,5 @@
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../paper-item/paper-item.html">
 
 <dom-module id="oc-transactions">
   <template>
@@ -10,63 +11,86 @@
         background: #fff;
         color: #000;
       }
+
+      h3 {
+        font-size:1.13em !important;
+        margin: 10px 0 !important;
+      }
     </style>
-  </template>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-xs-4">
-        <h3>Date</h3>
-      </div>
-      <div class="col-xs-6">
-        <h3>Description</h3>
-      </div>
-      <div class="col-xs-3">
-        <h3>Amount</h3>
-      </div>
-      <div class="col-xs-3">
-        <h3>Status</h3>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-4">
+          <h3>Date</h3>
+        </div>
+        <div class="col-xs-4">
+          <h3>Amount</h3>
+        </div>
+        <div class="col-xs-4">
+          <h3>Ref#</h3>
+        </div>
       </div>
       <template is="dom-if" if="[[transactions.isEmpty]]">
-        <div class="col-xs-12">
-          No Records to display
+        <div class="row">
+          <div class="col-xs-12">
+            No Records to display
+          </div>
         </div>
       </template>
       <template is="dom-repeat" items="[[transactions]]">
+
+        <div class="row">
+          <paper-item>
+            <div class="col-xs-4">
+              [[item.date]]
+            </div>
+            <div class="col-xs-4">
+              [[item.amount]]
+            </div>
+            <div class="col-xs-4">
+              [[item.reference]]
+            </div>
+          </paper-item>
+        </div>
+    </div>
+    <div class="row">
+      <paper-item>
         <div class="col-xs-4">
-          [[item.date]]
-        </div>
-        <div class="col-xs-6">
-          [[item.description]]
-        </div>
-        <div class="col-xs-3">
-          [[item.amount]]
-        </div>
-        <div class="col-xs-3">
           [[item.status]]
         </div>
-      </template>
+        <div class="col-xs-8">
+          [[item.description]]
+        </div>
+        <paper-item>
     </div>
-  </div>
-  <script>
-    /**
-     * `oc-transactions`
-     * List of transactions
-     *
-     * @customElement
-     * @polymer
-     * @demo demo/index.html
-     */
-    class OcTransactions extends Polymer.Element {
-      static get is() { return 'oc-transactions'; }
-      static get properties() {
-        return {
-          transactions: {
-            type: Array,
-          }
-        };
-      }
-    }
 
-    window.customElements.define(OcTransactions.is, OcTransactions);
+  </template>
+  </div>
+  </div>
+  </template>
+  <script>
+      /**
+       * `oc-transactions`
+       * List of transactions
+       *
+       * @customElement
+       * @polymer
+       * @demo demo/index.html
+       */
+      class OcTransactions extends Polymer.Element {
+          static get is() { return 'oc-transactions'; }
+          static get properties() {
+              return {
+                  transactions: {
+                      type: Array,
+                      value: []
+                  }
+              };
+          }
+          ready() {
+              super.ready();
+          }
+      }
+
+      window.customElements.define(OcTransactions.is, OcTransactions);
   </script>
 </dom-module>
