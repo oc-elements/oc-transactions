@@ -1,0 +1,9 @@
+# Created by .ignore support plugin (hsz.mobi)
+.gitignore
+.idea/inspectionProfiles/
+.idea/misc.xml
+.idea/modules.xml
+.idea/oc-transactions.iml
+.idea/thriftCompiler.xml
+.idea/workspace.xml
+bower_components/
