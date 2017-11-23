@@ -123,8 +123,7 @@
 
           //check if there are records
           _isGetYear(date){
-              let d = new Date(date);
-              return d.getFullYear() + '-' + d.getMonth() + '-' + d.getDay();
+              return /\d{4}-\d{2}-\d{2}/.exec(date);
           }
 
           //check if there are records
