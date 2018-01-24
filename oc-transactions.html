@@ -2,6 +2,7 @@
 <link rel="import" href="../paper-item/paper-item.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../oc-core-utils/oc-formatter.html">
 
 
 <dom-module id="oc-transactions">
@@ -61,11 +62,11 @@
                         <div class="col-xs-12 col-md-12">
                         </div>
                         <div class="col-xs-4 col-md-2">
-                            [[_isGetYear(item.dateTime)]] [[_isGetTime(item.dateTime)]]
+                            [[formatDate(item.dateTime)]]
 
                         </div>
                         <div class="col-xs-4 col-md-2">
-                            <b>R[[_formatPrice(item.amount)]]</b>
+                            <b>[[formatMoneyAmount(item.amount)]]</b>
                         </div>
                         <div class="col-xs-1 col-md-1">
                             <iron-icon  icon="[[_computeStatus(item.status)]]"></iron-icon>
@@ -84,66 +85,51 @@
         </div>
     </template>
     <script>
-        /**
-         * `oc-transactions`
-         * List of transactions
-         *
-         * @customElement
-         * @polymer
-         * @demo demo/index.html
-         */
-        class OcTransactions extends Polymer.Element {
-            static get is() { return 'oc-transactions'; }
-            static get properties() {
-                return {
-                    transactions: {
-                        type: Array,
-                        value: [],
-                        observer: '_isEmpty'
-                    },
-                    _empty:{
-                        Type: Boolean,
-                        value: true
-                    }
-                };
-            }
-            ready() {
-                super.ready();
-            }
+		/**
+		 * `oc-transactions`
+		 * List of transactions
+		 *
+		 * @customElement
+		 * @polymer
+		 * @demo demo/index.html
+		 */
+		class OcTransactions extends Ordercloud.Formatter(Polymer.Element) {
+			static get is() { return 'oc-transactions'; }
+			static get properties() {
+				return {
+					transactions: {
+						type: Array,
+						value: [],
+						observer: '_isEmpty'
+					},
+					_empty:{
+						Type: Boolean,
+						value: true
+					}
+				};
+			}
+			ready() {
+				super.ready();
+			}
 
-            _formatPrice(price){
-                return  price.toFixed(2);
-            }
+			//check if there are records
+			_isEmpty(){
+				this._empty = !this.transactions.length > 0;
+				console.log(this._empty);
+			}
 
-            //check if there are records
-            _isEmpty(){
-                this._empty = !this.transactions.length > 0;
-                console.log(this._empty);
-            }
+			//check if there are records
+			_computeStatus(status){
+				if(status === 'Success'){
+					return "check";
+				} else if (status.indexOf("Pending") >= 0){
+					return "watch-later";
+				} else {
+					return "error";
+				}
+			}
+		}
 
-            //check if there are records
-            _isGetYear(date){
-                return /\d{4}-\d{2}-\d{2}/.exec(date);
-            }
-
-            //check if there are records
-            _isGetTime(date){
-                let d = new Date(date);
-                return d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
-            }
-
-            //check if there are records
-            _computeStatus(status){
-                if(status === 'Success'){
-                    return "check";
-                } else if (status.indexOf("Pending") >= 0){
-                    return "watch-later";
-                } else {
-                    return "error";
-                }
-            }
-        }
-
-        window.customElements.define(OcTransactions.is, OcTransactions);
+		window.customElements.define(OcTransactions.is, OcTransactions);
     </script>
 </dom-module>
