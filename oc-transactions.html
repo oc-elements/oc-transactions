@@ -47,7 +47,7 @@
             </div>
 
             <div class="row">
-                <paper-listbox id="listbox" attr-for-selected="transaction" selected="{{_selectedTransaction}}">
+                <paper-listbox id="listbox" attr-for-selected="transaction" selected-values="{{_selectedTransactions}}" multi>
                     <template is="dom-repeat" items="[[transactions]]">
                         <paper-item style="padding: 0" transaction="[[item]]">
                             <paper-card style="width: 100%; margin-bottom: 3px">
@@ -73,7 +73,7 @@
                                     </div>
 
                                     <div class="row" class="detail-view"
-                                         hidden="[[!_isSelected(selectedItems.*, item)]]"
+                                         hidden="[[!_isSelected(_selectedItems.*, item)]]"
                                          style="padding-top: 5px; color: black; opacity: 0.8; border-top: 1px solid lightgrey;">
                                         <div class="col-xs-12">
                                             <div>[[item.entryReference]]</div>
@@ -136,43 +136,54 @@
 						Type: Boolean,
 						value: true
 					},
-					_selectedTransaction: {
-						type: Object,
-						observer: '_onTransactionSelected'
+					_selectedTransactions: {
+						type: Array,
 					},
-					selectedItems: {
+					_selectedItems: {
 						type: Object,
 						value: {}
 					}
 				};
 			}
 
+			// Observe changes to the selected transactions array
+			static get observers() {
+				return [
+					'_onTransactionSelected(_selectedTransactions.splices)'
+				]
+			}
+
 			ready() {
 				super.ready();
 			}
 
-			_onTransactionSelected(newSelected, oldSelected) {
-				if (oldSelected) {
-					this.selectedItems[oldSelected.reference] = false;
-					this.notifyPath('selectedItems.' + [oldSelected.reference]);
+			_onTransactionSelected(arrSplices) {
+				if (!arrSplices) return;
+				const selectedObjects = arrSplices.indexSplices[0].object;
+				const removedObjects = arrSplices.indexSplices[0].removed;
+
+				for (let i = 0; i < selectedObjects.length; i++) {
+					this._selectedItems[selectedObjects[i].reference] = true;
+					this.notifyPath('_selectedItems.' + selectedObjects[i].reference);
 				}
 
-				this.selectedItems[newSelected.reference] = true;
-				this.notifyPath('selectedItems.' + [newSelected.reference]);
+				for (let j = 0; j < removedObjects.length; j++) {
+					this._selectedItems[removedObjects[j].reference] = false;
+					this.notifyPath('_selectedItems.' + removedObjects[j].reference);
+				}
 			}
 
 			//check if there are records
 			_isEmpty() {
 				this._empty = !this.transactions.length > 0;
-				console.log(this._empty);
 			}
 
 			_isSelected(i, j) {
-				if (!this.selectedItems[j.reference] && this.selectedItems[j.reference] !== false) {
-					this.selectedItems[j.reference] = false;
+				if (!this._selectedItems[j.reference] && this._selectedItems[j.reference] !== false) {
+					this._selectedItems[j.reference] = false;
 				}
 
-				return this.selectedItems[j.reference];
+				return this._selectedItems[j.reference];
 			}
 
 			//check if there are records
