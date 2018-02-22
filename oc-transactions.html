@@ -26,14 +26,23 @@
             paper-item {
                 --paper-item-selected: {
                     color: #e0992f;
+                    font-weight: 500;
                 };
             }
 
-            .detail-view {
-                padding-top: 5px;
-                color: black;
-                opacity: 0.8;
-                border-top: 1px solid lightgrey;
+            .card-content {
+                padding:8px 10px 10px 10px;
+
+            }
+            .vertical-align {
+                display: flex;
+                align-items: center;
+            }
+
+            .transaction {
+                --iron-icon-height: 60px;
+                --iron-icon-width: 60px;
+                color: #e0992f;
             }
         </style>
         <div class="container-fluid">
@@ -47,48 +56,46 @@
             </div>
 
             <div class="row">
-                <paper-listbox id="listbox" attr-for-selected="transaction" selected-values="{{_selectedTransactions}}" multi>
+                <paper-listbox id="listbox" attr-for-selected="transaction" selected-values="{{_selectedTransactions}}"
+                               multi>
                     <template is="dom-repeat" items="[[transactions]]">
                         <paper-item style="padding: 0" transaction="[[item]]">
                             <paper-card style="width: 100%; margin-bottom: 3px">
                                 <div class="card-content">
-                                    <div class="row">
-                                        <div class="col-xs-8">
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    [[formatDate(item.dateTime)]]
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <span style="opacity: 0.5">Account: [[item.accountName]]</span>
-                                                </div>
-                                            </div>
+                                    <div class="row vertical-align">
+                                        <div class="transaction col-xs-2 ">
+                                            <iron-icon  icon="[[_computeTransactionIcon(item.transactionType)]]"></iron-icon>
                                         </div>
+                                        <div class="col-xs-10">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <div class="row">
+                                                        <div class="col-xs-6">
+                                                            [[formatDate(item.dateTime)]]
+                                                        </div>
 
-
-                                        <div class="col-xs-4">
-                                            <div class="pull-right">[[formatMoneyAmount(item.amount)]]</div>
+                                                        <div class="col-xs-6">
+                                                            <div class="pull-right">[[formatMoneyAmount(item.amount)]]</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xs-12">
+                                                            <div><span style="opacity: 0.5">[[item.entryReference]]</span></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-
                                     <div class="row" class="detail-view"
                                          hidden="[[!_isSelected(_selectedItems.*, item)]]"
-                                         style="padding-top: 5px; color: black; opacity: 0.8; border-top: 1px solid lightgrey;">
-                                        <div class="col-xs-12">
-                                            <div>[[item.entryReference]]</div>
-                                        </div>
+                                         style="padding-top: 5px; font-weight: 300; color: black; border-top: 1px solid lightgrey;">
+
                                         <div class="col-xs-4">
                                             <div>Ref#:</div>
                                         </div>
                                         <div class="col-xs-8">
                                             <div>[[item.reference]]</div>
-                                        </div>
-                                        <div class="col-xs-4">
-                                            <div>Issued by:</div>
-                                        </div>
-                                        <div class="col-xs-8">
-                                            <div>[[item.issuedByUser]]</div>
                                         </div>
                                         <div class="col-xs-4">
                                             <div>Status:</div>
@@ -97,10 +104,16 @@
                                             <div>[[item.status]]</div>
                                         </div>
                                         <div class="col-xs-4">
-                                            <div>Method:</div>
+                                            <div>Issued by:</div>
                                         </div>
                                         <div class="col-xs-8">
-                                            <div>[[item.method]]</div>
+                                            <div>[[item.issuedByUser]]</div>
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <div>Account:</div>
+                                        </div>
+                                        <div class="col-xs-8">
+                                            <div><iron-icon icon="[[_computeMethodIcon(item.method)]]"></iron-icon>[[item.accountName]]</div>
                                         </div>
                                     </div>
                                 </div>
@@ -112,92 +125,141 @@
         </div>
     </template>
     <script>
-		/**
-		 * `oc-transactions`
-		 * List of transactions
-		 *
-		 * @customElement
-		 * @polymer
-		 * @demo demo/index.html
-		 */
-		class OcTransactions extends Ordercloud.Formatter(Polymer.Element) {
-			static get is() {
-				return 'oc-transactions';
-			}
+        /**
+         * `oc-transactions`
+         * List of transactions
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+        class OcTransactions extends Ordercloud.Formatter(Polymer.Element) {
+            static get is() {
+                return 'oc-transactions';
+            }
 
-			static get properties() {
-				return {
-					transactions: {
-						type: Array,
-						value: [],
-						observer: '_isEmpty'
-					},
-					_empty: {
-						Type: Boolean,
-						value: true
-					},
-					_selectedTransactions: {
-						type: Array,
-					},
-					_selectedItems: {
-						type: Object,
-						value: {}
-					}
-				};
-			}
+            static get properties() {
+                return {
+                    transactions: {
+                        type: Array,
+                        value: [],
+                        observer: '_isEmpty'
+                    },
+                    _empty: {
+                        Type: Boolean,
+                        value: true
+                    },
+                    _selectedTransactions: {
+                        type: Array,
+                    },
+                    _selectedItems: {
+                        type: Object,
+                        value: {}
+                    }
+                };
+            }
 
-			// Observe changes to the selected transactions array
-			static get observers() {
-				return [
-					'_onTransactionSelected(_selectedTransactions.splices)'
-				]
-			}
+            // Observe changes to the selected transactions array
+            static get observers() {
+                return [
+                    '_onTransactionSelected(_selectedTransactions.splices)'
+                ]
+            }
 
-			ready() {
-				super.ready();
-			}
+            ready() {
+                super.ready();
+            }
 
-			_onTransactionSelected(arrSplices) {
-				if (!arrSplices) return;
-				const selectedObjects = arrSplices.indexSplices[0].object;
-				const removedObjects = arrSplices.indexSplices[0].removed;
+            _onTransactionSelected(arrSplices) {
+                if (!arrSplices) return;
+                const selectedObjects = arrSplices.indexSplices[0].object;
+                const removedObjects = arrSplices.indexSplices[0].removed;
 
-				for (let i = 0; i < selectedObjects.length; i++) {
-					this._selectedItems[selectedObjects[i].reference] = true;
-					this.notifyPath('_selectedItems.' + selectedObjects[i].reference);
-				}
+                for (let i = 0; i < selectedObjects.length; i++) {
+                    this._selectedItems[selectedObjects[i].reference] = true;
+                    this.notifyPath('_selectedItems.' + selectedObjects[i].reference);
+                }
 
-				for (let j = 0; j < removedObjects.length; j++) {
-					this._selectedItems[removedObjects[j].reference] = false;
-					this.notifyPath('_selectedItems.' + removedObjects[j].reference);
-				}
-			}
+                for (let j = 0; j < removedObjects.length; j++) {
+                    this._selectedItems[removedObjects[j].reference] = false;
+                    this.notifyPath('_selectedItems.' + removedObjects[j].reference);
+                }
+            }
 
-			//check if there are records
-			_isEmpty() {
-				this._empty = !this.transactions.length > 0;
-			}
+            //check if there are records
+            _isEmpty() {
+                this._empty = !this.transactions.length > 0;
+            }
 
-			_isSelected(i, j) {
-				if (!this._selectedItems[j.reference] && this._selectedItems[j.reference] !== false) {
-					this._selectedItems[j.reference] = false;
-				}
+            _isSelected(i, j) {
+                if (!this._selectedItems[j.reference] && this._selectedItems[j.reference] !== false) {
+                    this._selectedItems[j.reference] = false;
+                }
 
-				return this._selectedItems[j.reference];
-			}
+                return this._selectedItems[j.reference];
+            }
 
-			//check if there are records
-			_computeStatus(status) {
-				if (status === 'Success') {
-					return "check";
-				} else if (status.indexOf("Pending") >= 0) {
-					return "watch-later";
-				} else {
-					return "error";
-				}
-			}
-		}
+            //check if there are records
+            _computeStatus(status) {
+                if (status === 'Success') {
+                    return "check";
+                } else if (status.indexOf("Pending") >= 0) {
+                    return "watch-later";
+                } else {
+                    return "error";
+                }
+            }
 
-		window.customElements.define(OcTransactions.is, OcTransactions);
+            _computeMethodIcon(method){
+                switch(method){
+                    case  'System Account':
+                        return 'custom:camel';
+                        break;
+                    case  'Debit/Credit Card':
+                        return 'icons:credit-card';
+                        break;
+                    case  'Flash':
+                        return 'custom:cow';
+                        break;
+                    case  'Bank Account':
+                        return 'icons:account-balance';
+                        break;
+                }
+            }
+
+            _computeTransactionIcon(type){
+                if(type) {
+                    switch (type.toLowerCase()) {
+                        case  'transfer':
+                            return 'icons:swap-horiz';
+                            break;
+                        case  'payment':
+                            return 'icons:payment';
+                            break;
+                        case  'settlement':
+                            return 'icons:account-balance';
+                            break;
+                        case  'topup':
+                            return 'icons:arrow-upward';
+                            break;
+                        case  'reversal':
+                            return 'icons:refresh';
+                            break;
+                        case  'refund':
+                            return 'icons:system-update-alt';
+                            break;
+                        case  'purchase':
+                            return 'icons:shopping-cart';
+                            break;
+                        default:
+                            return 'editor:attach-money';
+                            break;
+                    }
+                }
+
+            }
+        }
+
+        window.customElements.define(OcTransactions.is, OcTransactions);
     </script>
 </dom-module>
