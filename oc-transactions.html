@@ -116,6 +116,9 @@
                                         <div class="col-xs-8">
                                             <div><iron-icon icon="[[_computeMethodIcon(item.method)]]"></iron-icon>[[item.accountName]]</div>
                                         </div>
+                                        <div class="col-xs-12">
+                                            <div on-tap="_viewReceipt">View Receipt</div>
+                                        </div>
                                     </div>
                                 </div>
                             </paper-card>
@@ -209,6 +212,13 @@
                 } else {
                     return "error";
                 }
+            }
+
+            _viewReceipt(e) {
+                // View Receipt
+                this.dispatchEvent(new CustomEvent('view-receipt', {
+                    bubbles: true, composed: true, detail: {"referenceData" :  e.model.item}
+                }));
             }
 
             _computeMethodIcon(method){
