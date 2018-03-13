@@ -46,10 +46,6 @@
                 --iron-icon-width: 60px;
                 color: #e0992f;
             }
-            .receipt-link {
-                color:#e0992f;
-                font-weight:bold;
-            }
         </style>
         <div class="container-fluid">
 
@@ -65,7 +61,7 @@
                 <paper-listbox id="listbox" attr-for-selected="transaction" selected-values="{{_selectedTransactions}}"
                                multi>
                     <template is="dom-repeat" items="[[transactions]]">
-                        <paper-item style="padding: 0" transaction="[[item]]">
+                        <paper-item style="padding: 0" transaction="[[item]]" hidden="[[_isHidden(item)]]">
                             <paper-card style="width: 100%; margin-bottom: 3px">
                                 <div class="card-content">
                                     <div class="row vertical-align">
@@ -134,8 +130,7 @@
                                             </div>
                                         </div>
                                         <div class="col-xs-12">
-
-                                            <div on-tap="_viewReceipt" class="receipt-link">View Receipt</div>
+                                            <div on-tap="_viewReceipt">View Receipt</div>
                                         </div>
                                     </div>
                                 </div>
@@ -206,6 +201,13 @@
 					this._selectedItems[removedObjects[j].reference] = false;
 					this.notifyPath('_selectedItems.' + removedObjects[j].reference);
 				}
+			}
+
+			// Any transaction we need to be hidden will be done here
+			_isHidden(transaction) {
+				if (transaction.transactionType === "TransactionFee")
+					return true;
+				return false;
 			}
 
 			//check if there are records
