@@ -155,162 +155,162 @@
         </div>
     </template>
     <script>
-		/**
-		 * `oc-transactions`
-		 * List of transactions
-		 *
-		 * @customElement
-		 * @polymer
-		 * @demo demo/index.html
-		 */
-		class OcTransactions extends Ordercloud.Formatter(Polymer.Element) {
-			static get is() {
-				return 'oc-transactions';
-			}
+        /**
+         * `oc-transactions`
+         * List of transactions
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+        class OcTransactions extends Ordercloud.Formatter(Polymer.Element) {
+            static get is() {
+                return 'oc-transactions';
+            }
 
-			static get properties() {
-				return {
-					transactions: {
-						type: Array,
-						value: [],
-						observer: '_isEmpty'
-					},
-					_empty: {
-						Type: Boolean,
-						value: true
-					},
-					_selectedTransactions: {
-						type: Array,
-					},
-					_selectedItems: {
-						type: Object,
-						value: {}
-					}
-				};
-			}
+            static get properties() {
+                return {
+                    transactions: {
+                        type: Array,
+                        value: [],
+                        observer: '_isEmpty'
+                    },
+                    _empty: {
+                        Type: Boolean,
+                        value: true
+                    },
+                    _selectedTransactions: {
+                        type: Array,
+                    },
+                    _selectedItems: {
+                        type: Object,
+                        value: {}
+                    }
+                };
+            }
 
-			// Observe changes to the selected transactions array
-			static get observers() {
-				return [
-					'_onTransactionSelected(_selectedTransactions.splices)'
-				]
-			}
+            // Observe changes to the selected transactions array
+            static get observers() {
+                return [
+                    '_onTransactionSelected(_selectedTransactions.splices)'
+                ]
+            }
 
-			ready() {
-				super.ready();
-			}
+            ready() {
+                super.ready();
+            }
 
-			_onTransactionSelected(arrSplices) {
-				if (!arrSplices) return;
-				const selectedObjects = arrSplices.indexSplices[0].object;
-				const removedObjects = arrSplices.indexSplices[0].removed;
+            _onTransactionSelected(arrSplices) {
+                if (!arrSplices) return;
+                const selectedObjects = arrSplices.indexSplices[0].object;
+                const removedObjects = arrSplices.indexSplices[0].removed;
 
-				for (let i = 0; i < selectedObjects.length; i++) {
-					this._selectedItems[selectedObjects[i].reference] = true;
-					this.notifyPath('_selectedItems.' + selectedObjects[i].reference);
-				}
+                for (let i = 0; i < selectedObjects.length; i++) {
+                    this._selectedItems[selectedObjects[i].transactionId] = true;
+                    this.notifyPath('_selectedItems.' + selectedObjects[i].transactionId);
+                }
 
-				for (let j = 0; j < removedObjects.length; j++) {
-					this._selectedItems[removedObjects[j].reference] = false;
-					this.notifyPath('_selectedItems.' + removedObjects[j].reference);
-				}
-			}
+                for (let j = 0; j < removedObjects.length; j++) {
+                    this._selectedItems[removedObjects[j].transactionId] = false;
+                    this.notifyPath('_selectedItems.' + removedObjects[j].transactionId);
+                }
+            }
 
-			// Any transaction we need to be hidden will be done here
-			_isHidden(transaction) {
-				if (transaction.transactionType === "TransactionFee")
-					return true;
-				return false;
-			}
+            // Any transaction we need to be hidden will be done here
+            _isHidden(transaction) {
+                if (transaction.transactionType === "TransactionFee")
+                    return true;
+                return false;
+            }
 
-			//check if there are records
-			_isEmpty() {
-				this._empty = !this.transactions.length > 0;
-			}
+            //check if there are records
+            _isEmpty() {
+                this._empty = !this.transactions.length > 0;
+            }
 
-			_isSelected(i, j) {
-				if (!this._selectedItems[j.reference] && this._selectedItems[j.reference] !== false) {
-					this._selectedItems[j.reference] = false;
-				}
+            _isSelected(i, j) {
+                if (!this._selectedItems[j.transactionId] && this._selectedItems[j.transactionId] !== false) {
+                    this._selectedItems[j.transactionId] = false;
+                }
 
-				return this._selectedItems[j.reference];
-			}
+                return this._selectedItems[j.transactionId];
+            }
 
-			_sanitiseUndefined(value) {
-				if (!value)
-					return "-";
-				else
-					return value;
-			}
+            _sanitiseUndefined(value) {
+                if (!value)
+                    return "-";
+                else
+                    return value;
+            }
 
-			//check if there are records
-			_computeStatus(status) {
-				if (status === 'Success') {
-					return "check";
-				} else if (status.indexOf("Pending") >= 0) {
-					return "watch-later";
-				} else {
-					return "error";
-				}
-			}
+            //check if there are records
+            _computeStatus(status) {
+                if (status === 'Success') {
+                    return "check";
+                } else if (status.indexOf("Pending") >= 0) {
+                    return "watch-later";
+                } else {
+                    return "error";
+                }
+            }
 
-			_viewReceipt(e) {
-				// View Receipt
-				this.dispatchEvent(new CustomEvent('view-receipt', {
-					bubbles: true, composed: true, detail: {"referenceData": e.model.item}
-				}));
-			}
+            _viewReceipt(e) {
+                // View Receipt
+                this.dispatchEvent(new CustomEvent('view-receipt', {
+                    bubbles: true, composed: true, detail: {"referenceData": e.model.item}
+                }));
+            }
 
-			_computeMethodIcon(method) {
-				switch (method) {
-					case  'System Account':
-						return 'custom:camel';
-						break;
-					case  'Debit/Credit Card':
-						return 'icons:credit-card';
-						break;
-					case  'Flash':
-						return 'custom:cow';
-						break;
-					case  'Bank Account':
-						return 'icons:account-balance';
-						break;
-				}
-			}
+            _computeMethodIcon(accountType) {
+                switch (accountType) {
+                    case  'system':
+                        return 'custom:camel';
+                        break;
+                    case  'peach_registered_card':
+                        return 'icons:credit-card';
+                        break;
+                    case  'flash_registered_msisdn':
+                        return 'custom:cow';
+                        break;
+                    case  'bank_account':
+                        return 'icons:account-balance';
+                        break;
+                }
+            }
 
-			_computeTransactionIcon(type) {
-				if (type) {
-					switch (type.toLowerCase()) {
-						case  'transfer':
-							return 'icons:swap-horiz';
-							break;
-						case  'payment':
-							return 'icons:payment';
-							break;
-						case  'settlement':
-							return 'icons:account-balance';
-							break;
-						case  'topup':
-							return 'icons:arrow-upward';
-							break;
-						case  'reversal':
-							return 'icons:refresh';
-							break;
-						case  'refund':
-							return 'icons:system-update-alt';
-							break;
-						case  'purchase':
-							return 'icons:shopping-cart';
-							break;
-						default:
-							return 'editor:attach-money';
-							break;
-					}
-				}
+            _computeTransactionIcon(type) {
+                if (type) {
+                    switch (type.toLowerCase()) {
+                        case  'transfer':
+                            return 'icons:swap-horiz';
+                            break;
+                        case  'payment':
+                            return 'icons:payment';
+                            break;
+                        case  'settlement':
+                            return 'icons:account-balance';
+                            break;
+                        case  'topup':
+                            return 'icons:arrow-upward';
+                            break;
+                        case  'reversal':
+                            return 'icons:refresh';
+                            break;
+                        case  'refund':
+                            return 'icons:system-update-alt';
+                            break;
+                        case  'purchase':
+                            return 'icons:shopping-cart';
+                            break;
+                        default:
+                            return 'editor:attach-money';
+                            break;
+                    }
+                }
 
-			}
-		}
+            }
+        }
 
-		window.customElements.define(OcTransactions.is, OcTransactions);
+        window.customElements.define(OcTransactions.is, OcTransactions);
     </script>
 </dom-module>
