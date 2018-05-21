@@ -59,258 +59,255 @@
                 padding-right: 0px !important;
             }
         </style>
-        <div class="container-fluid">
-
-            <div class="row">
-                <div class="col-xs-12">
-                    <template is="dom-if" if="[[_empty]]">
-                        No Records to display
-                    </template>
-                </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <template is="dom-if" if="[[_empty]]">
+                    No Records to display
+                </template>
             </div>
+        </div>
 
-            <div>
-                <paper-listbox id="listbox" attr-for-selected="transaction" selected-values="{{_selectedTransactions}}"
-                               multi>
-                    <template is="dom-repeat" items="[[transactions]]">
-                        <paper-item style="padding: 0" transaction="[[item]]" hidden="[[_isHidden(item)]]">
-                            <paper-card style="width: 100%; margin-bottom: 3px">
-                                <div class="card-content">
-                                    <div class="row vertical-align">
-                                        <div class="transaction col-xs-2 ">
-                                            <iron-icon
-                                                    icon="[[_computeTransactionIcon(item.transactionType)]]"></iron-icon>
-                                        </div>
-                                        <div class="col-xs-10">
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <div class="row">
-                                                        <div class="col-xs-6 no-right-padding">
-                                                            [[formatDate(item.dateTime)]]
-                                                        </div>
+        <div>
+            <paper-listbox id="listbox" attr-for-selected="transaction" selected-values="{{_selectedTransactions}}"
+                           multi>
+                <template is="dom-repeat" items="[[transactions]]">
+                    <paper-item style="padding: 0" transaction="[[item]]" hidden="[[_isHidden(item)]]">
+                        <paper-card style="width: 100%; margin-bottom: 3px">
+                            <div class="card-content">
+                                <div class="row vertical-align">
+                                    <div class="transaction col-xs-2 ">
+                                        <iron-icon
+                                                icon="[[_computeTransactionIcon(item.transactionType)]]"></iron-icon>
+                                    </div>
+                                    <div class="col-xs-10">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <div class="row">
+                                                    <div class="col-xs-6 no-right-padding">
+                                                        [[formatDate(item.dateTime)]]
+                                                    </div>
 
-                                                        <div class="col-xs-6">
-                                                            <div class="pull-right">[[formatMoneyAmount(item.amount)]]
-                                                            </div>
+                                                    <div class="col-xs-6">
+                                                        <div class="pull-right">[[formatMoneyAmount(item.amount)]]
                                                         </div>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-12">
-                                                            <div><span style="opacity: 0.5">[[item.transactionType]]</span>
-                                                            </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <div><span style="opacity: 0.5">[[item.transactionType]]</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row" class="detail-view"
-                                         hidden="[[!_isSelected(_selectedItems.*, item)]]"
-                                         style="padding-top: 5px; font-weight: 300; color: black; border-top: 1px solid lightgrey;">
+                                </div>
+                                <div class="row" class="detail-view"
+                                     hidden="[[!_isSelected(_selectedItems.*, item)]]"
+                                     style="padding-top: 5px; margin:0 -10px; font-weight: 300; color: black; border-top: 1px solid lightgrey;">
 
-                                        <div class="col-xs-4">
-                                            <div>Transaction#:</div>
-                                        </div>
-                                        <div class="col-xs-8">
-                                            <div>[[item.transactionId]]</div>
-                                        </div>
-                                        <div class="col-xs-4">
-                                            <div>Your Ref:</div>
-                                        </div>
-                                        <div class="col-xs-8">
-                                            <div>[[_sanitiseUndefined(item.reference)]]</div>
-                                        </div>
-                                        <div class="col-xs-4">
-                                            <div>Status:</div>
-                                        </div>
-                                        <div class="col-xs-8">
-                                            <div>[[item.status]]</div>
-                                        </div>
-                                        <div class="col-xs-4">
-                                            <div>Issued by:</div>
-                                        </div>
-                                        <div class="col-xs-8">
-                                            <div>[[item.issuedByUser]]</div>
-                                        </div>
-                                        <div class="col-xs-4">
-                                            <div>Account:</div>
-                                        </div>
-                                        <div class="col-xs-8">
-                                            <div>
-                                                <iron-icon icon="[[_computeMethodIcon(item.accountType)]]"></iron-icon>
-                                                [[item.accountName]]
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12">
-
-                                            <div on-tap="_viewReceipt" class="receipt-link">View Receipt</div>
+                                    <div class="col-xs-4">
+                                        <div>Transaction#:</div>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <div>[[item.transactionId]]</div>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <div>Your Ref:</div>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <div>[[_sanitiseUndefined(item.reference)]]</div>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <div>Status:</div>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <div>[[item.status]]</div>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <div>Issued by:</div>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <div>[[item.issuedByUser]]</div>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <div>Account:</div>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <div>
+                                            <iron-icon icon="[[_computeMethodIcon(item.accountType)]]"></iron-icon>
+                                            [[item.accountName]]
                                         </div>
                                     </div>
+                                    <div class="col-xs-12">
+
+                                        <div on-tap="_viewReceipt" class="receipt-link">View Receipt</div>
+                                    </div>
                                 </div>
-                            </paper-card>
-                        </paper-item>
-                    </template>
-                </paper-listbox>
-            </div>
+                            </div>
+                        </paper-card>
+                    </paper-item>
+                </template>
+            </paper-listbox>
         </div>
     </template>
     <script>
-        /**
-         * `oc-transactions`
-         * List of transactions
-         *
-         * @customElement
-         * @polymer
-         * @demo demo/index.html
-         */
-        class OcTransactions extends Ordercloud.Formatter(Polymer.Element) {
-            static get is() {
-                return 'oc-transactions';
-            }
+		/**
+		 * `oc-transactions`
+		 * List of transactions
+		 *
+		 * @customElement
+		 * @polymer
+		 * @demo demo/index.html
+		 */
+		class OcTransactions extends Ordercloud.Formatter(Polymer.Element) {
+			static get is() {
+				return 'oc-transactions';
+			}
 
-            static get properties() {
-                return {
-                    transactions: {
-                        type: Array,
-                        value: [],
-                        observer: '_isEmpty'
-                    },
-                    _empty: {
-                        Type: Boolean,
-                        value: true
-                    },
-                    _selectedTransactions: {
-                        type: Array,
-                    },
-                    _selectedItems: {
-                        type: Object,
-                        value: {}
-                    }
-                };
-            }
+			static get properties() {
+				return {
+					transactions: {
+						type: Array,
+						value: [],
+						observer: '_isEmpty'
+					},
+					_empty: {
+						Type: Boolean,
+						value: true
+					},
+					_selectedTransactions: {
+						type: Array,
+					},
+					_selectedItems: {
+						type: Object,
+						value: {}
+					}
+				};
+			}
 
-            // Observe changes to the selected transactions array
-            static get observers() {
-                return [
-                    '_onTransactionSelected(_selectedTransactions.splices)'
-                ]
-            }
+			// Observe changes to the selected transactions array
+			static get observers() {
+				return [
+					'_onTransactionSelected(_selectedTransactions.splices)'
+				]
+			}
 
-            ready() {
-                super.ready();
-            }
+			ready() {
+				super.ready();
+			}
 
-            _onTransactionSelected(arrSplices) {
-                if (!arrSplices) return;
-                const selectedObjects = arrSplices.indexSplices[0].object;
-                const removedObjects = arrSplices.indexSplices[0].removed;
+			_onTransactionSelected(arrSplices) {
+				if (!arrSplices) return;
+				const selectedObjects = arrSplices.indexSplices[0].object;
+				const removedObjects = arrSplices.indexSplices[0].removed;
 
-                for (let i = 0; i < selectedObjects.length; i++) {
-                    this._selectedItems[selectedObjects[i].transactionId] = true;
-                    this.notifyPath('_selectedItems.' + selectedObjects[i].transactionId);
-                }
+				for (let i = 0; i < selectedObjects.length; i++) {
+					this._selectedItems[selectedObjects[i].transactionId] = true;
+					this.notifyPath('_selectedItems.' + selectedObjects[i].transactionId);
+				}
 
-                for (let j = 0; j < removedObjects.length; j++) {
-                    this._selectedItems[removedObjects[j].transactionId] = false;
-                    this.notifyPath('_selectedItems.' + removedObjects[j].transactionId);
-                }
-            }
+				for (let j = 0; j < removedObjects.length; j++) {
+					this._selectedItems[removedObjects[j].transactionId] = false;
+					this.notifyPath('_selectedItems.' + removedObjects[j].transactionId);
+				}
+			}
 
-            // Any transaction we need to be hidden will be done here
-            _isHidden(transaction) {
-                if (transaction.transactionType === "TransactionFee")
-                    return true;
-                return false;
-            }
+			// Any transaction we need to be hidden will be done here
+			_isHidden(transaction) {
+				if (transaction.transactionType === "TransactionFee")
+					return true;
+				return false;
+			}
 
-            //check if there are records
-            _isEmpty() {
-                this._empty = !this.transactions.length > 0;
-            }
+			//check if there are records
+			_isEmpty() {
+				this._empty = !this.transactions.length > 0;
+			}
 
-            _isSelected(i, j) {
-                if (!this._selectedItems[j.transactionId] && this._selectedItems[j.transactionId] !== false) {
-                    this._selectedItems[j.transactionId] = false;
-                }
+			_isSelected(i, j) {
+				if (!this._selectedItems[j.transactionId] && this._selectedItems[j.transactionId] !== false) {
+					this._selectedItems[j.transactionId] = false;
+				}
 
-                return this._selectedItems[j.transactionId];
-            }
+				return this._selectedItems[j.transactionId];
+			}
 
-            _sanitiseUndefined(value) {
-                if (!value)
-                    return "-";
-                else
-                    return value;
-            }
+			_sanitiseUndefined(value) {
+				if (!value)
+					return "-";
+				else
+					return value;
+			}
 
-            //check if there are records
-            _computeStatus(status) {
-                if (status === 'Success') {
-                    return "check";
-                } else if (status.indexOf("Pending") >= 0) {
-                    return "watch-later";
-                } else {
-                    return "error";
-                }
-            }
+			//check if there are records
+			_computeStatus(status) {
+				if (status === 'Success') {
+					return "check";
+				} else if (status.indexOf("Pending") >= 0) {
+					return "watch-later";
+				} else {
+					return "error";
+				}
+			}
 
-            _viewReceipt(e) {
-                // View Receipt
-                this.dispatchEvent(new CustomEvent('view-receipt', {
-                    bubbles: true, composed: true, detail: {"referenceData": e.model.item}
-                }));
-            }
+			_viewReceipt(e) {
+				// View Receipt
+				this.dispatchEvent(new CustomEvent('view-receipt', {
+					bubbles: true, composed: true, detail: {"referenceData": e.model.item}
+				}));
+			}
 
-            _computeMethodIcon(accountType) {
-                switch (accountType) {
-                    case  'system':
-                        return 'custom:camel';
-                        break;
-                    case  'peach_registered_card':
-                        return 'icons:credit-card';
-                        break;
-                    case  'flash_registered_msisdn':
-                        return 'custom:cow';
-                        break;
-                    case  'bank_account':
-                        return 'icons:account-balance';
-                        break;
-                }
-            }
+			_computeMethodIcon(accountType) {
+				switch (accountType) {
+					case  'system':
+						return 'custom:camel';
+						break;
+					case  'peach_registered_card':
+						return 'icons:credit-card';
+						break;
+					case  'flash_registered_msisdn':
+						return 'custom:cow';
+						break;
+					case  'bank_account':
+						return 'icons:account-balance';
+						break;
+				}
+			}
 
-            _computeTransactionIcon(type) {
-                if (type) {
-                    switch (type.toLowerCase()) {
-                        case  'transfer':
-                            return 'icons:swap-horiz';
-                            break;
-                        case  'payment':
-                            return 'icons:payment';
-                            break;
-                        case  'settlement':
-                            return 'icons:account-balance';
-                            break;
-                        case  'topup':
-                            return 'icons:arrow-upward';
-                            break;
-                        case  'reversal':
-                            return 'icons:refresh';
-                            break;
-                        case  'refund':
-                            return 'icons:system-update-alt';
-                            break;
-                        case  'purchase':
-                            return 'icons:shopping-cart';
-                            break;
-                        default:
-                            return 'editor:attach-money';
-                            break;
-                    }
-                }
+			_computeTransactionIcon(type) {
+				if (type) {
+					switch (type.toLowerCase()) {
+						case  'transfer':
+							return 'icons:swap-horiz';
+							break;
+						case  'payment':
+							return 'icons:payment';
+							break;
+						case  'settlement':
+							return 'icons:account-balance';
+							break;
+						case  'topup':
+							return 'icons:arrow-upward';
+							break;
+						case  'reversal':
+							return 'icons:refresh';
+							break;
+						case  'refund':
+							return 'icons:system-update-alt';
+							break;
+						case  'purchase':
+							return 'icons:shopping-cart';
+							break;
+						default:
+							return 'editor:attach-money';
+							break;
+					}
+				}
 
-            }
-        }
+			}
+		}
 
-        window.customElements.define(OcTransactions.is, OcTransactions);
+		window.customElements.define(OcTransactions.is, OcTransactions);
     </script>
 </dom-module>
