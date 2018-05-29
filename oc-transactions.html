@@ -10,18 +10,26 @@
 
 <dom-module id="oc-transactions">
     <template>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <style include="shop-button" is="custom-style">
 
             :host {
                 display: block;
-                background: #fff;
-                color: #000;
+                color: white;
             }
 
             h3 {
                 font-size: 1.13em !important;
                 margin: 10px 0 !important;
+            }
+
+            paper-card {
+                background-color: var(--app-content-background-color);
+                color: var(--app-secondary-color);
+            }
+
+            paper-listbox {
+                background-color: var(--app-secondary-color);
             }
 
             paper-item {
@@ -31,33 +39,25 @@
                 };
             }
 
-            .card-content {
-                padding: 8px 10px 10px 10px;
-
+            iron-icon {
+                color: var(--app-secondary-color);
             }
 
-            .vertical-align {
-                display: flex;
-                align-items: center;
+            .transaction-icon {
+                background-color: white;
+                width: 100%;
+                height: 100%;
             }
 
             .transaction {
-                --iron-icon-height: 60px;
-                --iron-icon-width: 60px;
-                color: #e0992f;
+                background-color: white;
             }
+
             .receipt-link {
-                color:#e0992f;
-                font-weight:bold;
+                color: #e0992f;
+                font-weight: bold;
             }
-            .container-fluid {
-                padding-left:0 !important;
-                padding-right:0 !important;
-                margin: 0 -15px !important;
-            }
-            .no-right-padding {
-                padding-right: 0px !important;
-            }
+
         </style>
         <div class="row">
             <div class="col-xs-12">
@@ -67,89 +67,84 @@
             </div>
         </div>
 
-        <div>
-            <paper-listbox id="listbox" attr-for-selected="transaction" selected-values="{{_selectedTransactions}}"
-                           multi>
-                <template is="dom-repeat" items="[[transactions]]">
-                    <paper-item style="padding: 0" transaction="[[item]]" hidden="[[_isHidden(item)]]">
-                        <paper-card style="width: 100%; margin-bottom: 3px">
-                            <div class="card-content">
-                                <div class="row vertical-align">
-                                    <div class="transaction col-xs-2 ">
-                                        <iron-icon
-                                                icon="[[_computeTransactionIcon(item.transactionType)]]"></iron-icon>
-                                    </div>
-                                    <div class="col-xs-10">
+        <paper-listbox id="listbox" class="row" attr-for-selected="transaction" selected-values="{{_selectedTransactions}}"
+                       multi>
+            <template is="dom-repeat" items="[[transactions]]">
+                <paper-item transaction="[[item]]" hidden="[[_isHidden(item)]]">
+                    <paper-card class="row" style="margin-bottom: 3px; padding-left: 15px">
+                        <div class="row">
+                            <div class="transaction col-3 ">
+                                <iron-icon class="transaction-icon"
+                                           icon="[[_computeTransactionIcon(item.transactionType)]]"></iron-icon>
+                            </div>
+                            <div class="col-9">
+                                <div class="row">
+                                    <div class="col-12">
                                         <div class="row">
-                                            <div class="col-xs-12">
-                                                <div class="row">
-                                                    <div class="col-xs-6 no-right-padding">
-                                                        [[formatDate(item.dateTime)]]
-                                                    </div>
+                                            <div class="col-6">
+                                                [[formatDate(item.dateTime)]]
+                                            </div>
 
-                                                    <div class="col-xs-6">
-                                                        <div class="pull-right">[[formatMoneyAmount(item.amount)]]
-                                                        </div>
-                                                    </div>
+                                            <div class="col-6">
+                                                <div class="pull-right">[[formatMoneyAmount(item.amount)]]
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-xs-12">
-                                                        <div><span style="opacity: 0.5">[[item.transactionType]]</span>
-                                                        </div>
-                                                    </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div><span style="opacity: 0.5">[[item.transactionType]]</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row" class="detail-view"
-                                     hidden="[[!_isSelected(_selectedItems.*, item)]]"
-                                     style="padding-top: 5px; margin:0 -10px; font-weight: 300; color: black; border-top: 1px solid lightgrey;">
-
-                                    <div class="col-xs-4">
-                                        <div>Transaction#:</div>
-                                    </div>
-                                    <div class="col-xs-8">
-                                        <div>[[item.transactionId]]</div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div>Your Ref:</div>
-                                    </div>
-                                    <div class="col-xs-8">
-                                        <div>[[_sanitiseUndefined(item.reference)]]</div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div>Status:</div>
-                                    </div>
-                                    <div class="col-xs-8">
-                                        <div>[[item.status]]</div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div>Issued by:</div>
-                                    </div>
-                                    <div class="col-xs-8">
-                                        <div>[[item.issuedByUser]]</div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div>Account:</div>
-                                    </div>
-                                    <div class="col-xs-8">
-                                        <div>
-                                            <iron-icon icon="[[_computeMethodIcon(item.accountType)]]"></iron-icon>
-                                            [[item.accountName]]
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12">
-
-                                        <div on-tap="_viewReceipt" class="receipt-link">View Receipt</div>
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="row container"
+                             hidden="[[!_isSelected(_selectedItems.*, item)]]"
+                             style="padding-top: 5px; font-weight: 300; color: black; border-top: 1px solid lightgrey;">
+                            <div class="col-4">
+                                <div>Transaction#:</div>
+                            </div>
+                            <div class="col-8">
+                                <div>[[item.transactionId]]</div>
+                            </div>
+                            <div class="col-4">
+                                <div>Your Ref:</div>
+                            </div>
+                            <div class="col-8">
+                                <div>[[_sanitiseUndefined(item.reference)]]</div>
+                            </div>
+                            <div class="col-4">
+                                <div>Status:</div>
+                            </div>
+                            <div class="col-8">
+                                <div>[[item.status]]</div>
+                            </div>
+                            <div class="col-4">
+                                <div>Issued by:</div>
+                            </div>
+                            <div class="col-8">
+                                <div>[[item.issuedByUser]]</div>
+                            </div>
+                            <div class="col-4">
+                                <div>Account:</div>
+                            </div>
+                            <div class="col-8">
+                                <div>
+                                    <iron-icon icon="[[_computeMethodIcon(item.accountType)]]"></iron-icon>
+                                    [[item.accountName]]
                                 </div>
                             </div>
-                        </paper-card>
-                    </paper-item>
-                </template>
-            </paper-listbox>
-        </div>
+                            <div class="col-12">
+
+                                <div on-tap="_viewReceipt" class="receipt-link">View Receipt</div>
+                            </div>
+                        </div>
+                    </paper-card>
+                </paper-item>
+            </template>
+        </paper-listbox>
     </template>
     <script>
 		/**
