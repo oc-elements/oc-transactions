@@ -141,7 +141,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-9 padding-5">
-                                                <span style="opacity: 0.5">[[item.transactionType]]</span>
+                                                <span style="opacity: 0.5">[[item.transactionType]] [[_computeToFrom(item.amount)]] [[item.debitorCreditor]]</span>
                                             </div>
                                             <div class="col-3 padding-5 text-center">
                                                 <iron-icon class$="status-icon [[_computeStatusIconClass(item.status)]]"icon="[[_computeStatusIcon(item.status)]]"></iron-icon>
@@ -355,6 +355,15 @@
                     case  'pendingUserConfirmation':
                         return 'pending-icon';
                         break;
+                }
+            }
+
+            _computeToFrom(amount) {
+                if (amount > 0) {
+                    return 'From';
+                }
+                else {
+                    return 'To';
                 }
             }
 
