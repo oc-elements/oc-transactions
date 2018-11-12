@@ -147,6 +147,17 @@
                                                 <iron-icon class$="status-icon [[_computeStatusIconClass(item.status)]]"icon="[[_computeStatusIcon(item.status)]]"></iron-icon>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-7 padding-5">
+                                                <span style="opacity: 0.5">Balance</span>
+                                            </div>
+
+                                            <div class="col-5 padding-5">
+                                                <div class="float-right">
+                                                    <span style="opacity: 0.5">[[formatMoneyAmount(item.balance)]]</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
