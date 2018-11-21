@@ -96,10 +96,6 @@
                 color: #404040;
             }
 
-            .iron-selected {
-                border-bottom: 1px solid #465565;
-            }
-
             .padding-5 {
                 padding:5px !important;
             }
@@ -120,7 +116,7 @@
 
                 <paper-item transaction="[[item]]" hidden="[[_isHidden(item)]]" style="width: 100%">
                     <paper-card>
-                        <div class="row">
+                        <div class="row" on-tap="_viewReceipt">
                             <div class="transaction col-2 center-icon">
                                 <iron-icon class="transaction-icon"
                                            icon="[[_computeTransactionIcon(item.transactionType)]]"></iron-icon>
@@ -147,62 +143,8 @@
                                                 <iron-icon class$="status-icon [[_computeStatusIconClass(item.status)]]"icon="[[_computeStatusIcon(item.status)]]"></iron-icon>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-7 padding-5">
-                                                <span style="opacity: 0.5">Balance</span>
-                                            </div>
-
-                                            <div class="col-5 padding-5">
-                                                <div class="float-right">
-                                                    <span style="opacity: 0.5">[[formatMoneyAmount(item.balance)]]</span>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-
-                        <div class="row"
-                             hidden="[[!_isSelected(_selectedItems.*, item)]]"
-                             style="padding-top: 5px; font-weight: 300; color: black; border-top: 1px solid lightgrey; margin:0 -15px; padding:0; background:#eee">
-                            <div class="col-4">
-                                <div>Transaction#:</div>
-                            </div>
-                            <div class="col-8">
-                                <div>[[item.transactionId]]</div>
-                            </div>
-                            <div class="col-4">
-                                <div>Your Ref:</div>
-                            </div>
-                            <div class="col-8">
-                                <div>[[_sanitiseUndefined(item.reference)]]</div>
-                            </div>
-                            <div class="col-4">
-                                <div>Status:</div>
-                            </div>
-                            <div class="col-8">
-                                <div>[[item.status]]</div>
-                            </div>
-                            <div class="col-4">
-                                <div>Issued by:</div>
-                            </div>
-                            <div class="col-8">
-                                <div>[[item.issuedByUser]]</div>
-                            </div>
-                            <div class="col-4">
-                                <div>Account:</div>
-                            </div>
-                            <div class="col-8">
-                                <div>
-                                    <iron-icon icon="[[_computeMethodIcon(item.accountType)]]"></iron-icon>
-                                    [[item.accountName]]
-                                </div>
-                            </div>
-                            <div class="col-12">
-
-                                <div on-tap="_viewReceipt" class="receipt-link">View Receipt</div>
                             </div>
                         </div>
                     </paper-card>
