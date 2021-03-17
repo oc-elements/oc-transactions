@@ -138,7 +138,8 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-9 padding-5">
-												<span style="opacity: 0.5">[[item.typeName]] [[_computeToFrom(item.bias)]] [[item.counterParty.method.organisation.name]] [[item.counterParty.method.reservation.intendedMethodName]] [[item.counterParty.method.flash.msisdn]] [[item.counterParty.method.reservation.intendedMethod.flash.msisdn]]</span>
+												<span style="opacity: 0.5">[[item.typeName]] [[_computeToFrom(item.bias)]] [[item.counterParty.method.organisation.name]] [[item.counterParty.method.reservation.intendedMethodName]] [[item.counterParty.method.flash.msisdn]] [[item.counterParty.method.reservation.intendedMethod.flash.msisdn]]
+														[[item.counterParty.method.mamaMoney.customerMsisdn]] [[item.counterParty.methodName]]</span>
 												<template is="dom-if" if="[[item.counterParty.method.card]]"><span style="opacity: 0.5">Card Device</span></template>
                                             </div>
                                             <div class="col-3 padding-5 text-center">
