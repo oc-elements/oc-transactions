@@ -207,13 +207,13 @@
                 const removedObjects = arrSplices.indexSplices[0].removed;
 
                 for (let i = 0; i < selectedObjects.length; i++) {
-                    this._selectedItems[selectedObjects[i].transactionId] = true;
-                    this.notifyPath('_selectedItems.' + selectedObjects[i].transactionId);
+                    this._selectedItems[selectedObjects[i].correlationId] = true;
+                    this.notifyPath('_selectedItems.' + selectedObjects[i].correlationId);
                 }
 
                 for (let j = 0; j < removedObjects.length; j++) {
-                    this._selectedItems[removedObjects[j].transactionId] = false;
-                    this.notifyPath('_selectedItems.' + removedObjects[j].transactionId);
+                    this._selectedItems[removedObjects[j].correlationId] = false;
+                    this.notifyPath('_selectedItems.' + removedObjects[j].correlationId);
                 }
             }
 
@@ -230,11 +230,11 @@
             }
 
             _isSelected(i, j) {
-                if (!this._selectedItems[j.transactionId] && this._selectedItems[j.transactionId] !== false) {
-                    this._selectedItems[j.transactionId] = false;
+                if (!this._selectedItems[j.correlationId] && this._selectedItems[j.correlationId] !== false) {
+                    this._selectedItems[j.correlationId] = false;
                 }
 
-                return this._selectedItems[j.transactionId];
+                return this._selectedItems[j.correlationId];
             }
 
             _sanitiseUndefined(value) {
@@ -271,7 +271,7 @@
                         return 'icons:credit-card';
                         break;
                     case  'flash_registered_msisdn':
-                        return 'custom:cow';
+                        return 'cow:cow';
                         break;
                     case  'bank_account':
                         return 'icons:account-balance';
